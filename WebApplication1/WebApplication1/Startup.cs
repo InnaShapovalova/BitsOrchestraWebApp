@@ -1,21 +1,21 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using WebApplication1;
+using WebApplication1.Models;
 
 namespace WebApplication1
 {
     public class Startup
     {
+        private readonly AppConfiguration _appConfiguration = new AppConfiguration();
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            configuration.Bind(_appConfiguration);
         }
 
         public IConfiguration Configuration { get; }
@@ -24,6 +24,7 @@ namespace WebApplication1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddDbContext<CsvFileContext>(options => options.UseSqlServer(_appConfiguration.DbSettings.MsSqlConnectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
