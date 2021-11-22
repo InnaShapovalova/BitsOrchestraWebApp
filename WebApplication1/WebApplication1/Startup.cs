@@ -5,7 +5,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebApplication1;
+using WebApplication1.IServices;
 using WebApplication1.Models;
+using WebApplication1.Services;
 
 namespace WebApplication1
 {
@@ -25,9 +27,10 @@ namespace WebApplication1
         {
             services.AddControllersWithViews();
             services.AddDbContext<CsvFileContext>(options => options.UseSqlServer(_appConfiguration.DbSettings.MsSqlConnectionString));
+            services.AddScoped<ICsvService, CsvService>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // This method gets called by the runtime. Use tShis method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
